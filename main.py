@@ -38,15 +38,11 @@ async def weather_api(lat,lon, daiac_sat, As):
     saved_count = [reading[22] for reading in latest_two_readings]
     print('count',saved_count)
     latest_direction = [reading[19] for reading in latest_two_readings]
-    # print('latest date and time', latest_time_and_date[0])
-    # print('latest date and time1', latest_time_and_date[1])
-    # print('latest_direction',latest_direction)
-    # print('continous flag',CF)
-    # print('start_time',start_time[0])
+
     current_time = datetime.now()
     # print('Current time', current_time)
     saved_latest_date=datetime.strptime(latest_time_and_date[0], '%Y-%m-%d %H:%M:%S')
-    saved_previous_date = datetime.strptime(latest_time_and_date[1], '%Y-%m-%d %H:%M:%S')
+
     diacsat=daiac_sat
     As=As
     current_time_str = current_time.strftime('%Y-%m-%d %H:%M:%S')
@@ -146,10 +142,18 @@ async def weather_api(lat,lon, daiac_sat, As):
                 else:
                     print('Dates are not same do direction call')
                     return jsonify('dates are not same do a direction call')
-
             else:
+                continous_flag = 0
+                start_time = current_time_db
+                count = 3
+                db = db_push(current_time_db, lat, lon, daiac_sat, As, hoot, continous_flag, current_time_db, count)
                 return jsonify(hoot)
+
         else:
+            continous_flag=0
+            start_time=current_time_db
+            count=3
+            db = db_push(current_time_db, lat, lon, daiac_sat, As, hoot, continous_flag, current_time_db, count)
             return jsonify(hoot)
 
 
